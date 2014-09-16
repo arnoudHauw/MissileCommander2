@@ -14,8 +14,7 @@ package
 	{
 		private var _mouseLocation : Vector2D;
 		
-		private var blocks : Array = [];
-		private var totalBlocks : int = 5;
+		private var turret : Turret = new Turret;
 		
 		public function Main():void 
 		{
@@ -28,12 +27,17 @@ package
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
 			
-			_mouseLocation = new Vector2D(mouseX, mouseY);
+			_mouseLocation = new Vector2D;
+			
+			turret.y = 400;
+			turret.x = 400;
+			addChild(turret);
 			
 			stage.addEventListener(Event.ENTER_FRAME, update);
 			
 			addEventListener(Event.ENTER_FRAME, update);
-			addEventListener(MouseEvent.MOUSE_DOWN, removeObject);
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, turretRotation);
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, shootBullet);
 			
 		}
 		
@@ -41,41 +45,42 @@ package
 		{
 			_mouseLocation.y = mouseY;
 			_mouseLocation.x = mouseX;
-			trace(_mouseLocation);
-			
-			var l : int = blocks.length;
-			for (var l : int = 1
-			
-			
-			
-			
-			
-			; i < l ; i++ )
-			{
-				
-			}
 		}
 		
-		function getNewBlock()
+		private function turretRotation(e:MouseEvent):void
 		{
-			var block : Block = new Block();
-			addChild(block);
-			block.y = Math.random() * stage.stageWidth;
-			block.x = Math.random() * stage.stageHeight;
-			blocks.push(block);
+			
+			_mouseLocation.y = mouseY;
+			_mouseLocation.x = mouseX;
+			turret.Rotation = _mouseLocation.angle * 180 / Math.PI;
+			/*var rad:Number = Math.atan2(opp, adj);
+			angle = rad * 180 / Math.PI;
+			_texture.rotation = angle;*/
 		}
-		
-		for (var i : int = 0 ; i < totalBlocks ; i++ )
+		private function shootBullet(e:MouseEvent):void
 		{
-			getNewBlock();
+			var bullet:Bullet = new Bullet;
+			bullet.direction(turret.turretRotation());
+			bullet.rotation = turret._texture.rotation;
+			stage.addChild(bullet);
+			bullet.x = turret.x;
+			bullet.y = turret.y;
+			
 		}
-		
-		function removeObject(e:MouseEvent)
+		/*private function Shoot(e:Event):void
 		{
-			var currentBlock : block = e.target as Block;
-			var index : int = blocks.indexOf(currentBlock);
-			blocks.splice(0 , 1);
-		}
+			someNum = Math.ceil(Math.random() * 3);
+			
+			
+			var bubble:Bubble = new Bubble;
+			bubble.direction(_player.playerRotation());
+			bubble.rotation = Unit._texture.rotation;
+			stage.addChild(bubble);
+			bubbleArray.push(bubble);
+			bubble.x = _player.x;
+			bubble.y = _player.y;
+			bubble.z = _player.z -100;
+		}*/
 	}
 	
 }
