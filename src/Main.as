@@ -62,7 +62,7 @@ package
 			var bullet:Bullet = new Bullet;
 			bullet.direction(turret.turretRotation());
 			bullet.rotation = turret._texture.rotation;
-			stage.addChild(bullet);
+			stage.addChild(bullet); 
 			bullet.x = turret.x;
 			bullet.y = turret.y;
 			
