@@ -1,86 +1,79 @@
-package 
+package
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.text.engine.TextBlock;
+	import object.BulletClass;
+	import object.pObject;
+	import object.BulletClass;
 	import utils.Vector2D;
+	import object.FactoryClass;
+	import flash.geom.*;
 	
 	/**
 	 * ...
 	 * @author arnoud
 	 */
-	public class Main extends Sprite 
+	public class Main extends Sprite
 	{
-		private var _mouseLocation : Vector2D;
+		private var turrets:Array = [];
+		private var amountTurrets:uint = 3;
+		private var MouseClick:Point;
 		
-		private var turret : Turret = new Turret;
-		
-		public function Main():void 
+		public function Main():void
 		{
-			if (stage) init();
-			else addEventListener(Event.ADDED_TO_STAGE, init);
+			if (stage)
+				init();
+			else
+				addEventListener(Event.ADDED_TO_STAGE, init);
 		}
 		
-		private function init(e:Event = null):void 
+		private function init(e:Event = null):void
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
 			
-			_mouseLocation = new Vector2D;
-			
-			turret.y = 400;
-			turret.x = 400;
-			addChild(turret);
-			
-			stage.addEventListener(Event.ENTER_FRAME, update);
-			
-			addEventListener(Event.ENTER_FRAME, update);
-			stage.addEventListener(MouseEvent.MOUSE_MOVE, turretRotation);
+			for (var i:uint; i < amountTurrets; i++)
+			{
+				var turret:pObject = FactoryClass.createAsset(FactoryClass.ASSET_TOWER);
+				
+				turrets.push(turret);
+				addChild(turret);
+				turrets[i].x = stage.stageWidth / (amountTurrets - 1) * i;
+				turrets[i].y = stage.stageHeight - turrets[i].height / 5;
+			}
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, shootBullet);
-			
+		
 		}
 		
-		private function update(e:Event):void
-		{
-			_mouseLocation.y = mouseY;
-			_mouseLocation.x = mouseX;
-		}
-		
-		private function turretRotation(e:MouseEvent):void
-		{
-			
-			_mouseLocation.y = mouseY;
-			_mouseLocation.x = mouseX;
-			turret.Rotation = _mouseLocation.angle * 180 / Math.PI;
-			/*var rad:Number = Math.atan2(opp, adj);
-			angle = rad * 180 / Math.PI;
-			_texture.rotation = angle;*/
-		}
+		/*
+		   if    MousePosition : X of Tower + MousePosition : Y of tower is lower than the max value of a number.
+		   "Counter = The tower"
+		   "ClosestTower:Number = Mouse Position : X of Tower + Moouse Position : Y of Tower.
+		   Towers[Counter]{
+		   Shoot()
+		 }*/
 		private function shootBullet(e:MouseEvent):void
 		{
-			var bullet:Bullet = new Bullet;
-			bullet.direction(turret.turretRotation());
-			bullet.rotation = turret._texture.rotation;
-			stage.addChild(bullet); 
-			bullet.x = turret.x;
-			bullet.y = turret.y;
+			/*var angle:Number = 2 * Math.PI * (90 / 360);
+			   var translatePoint:Point = Point.polar(distance, angle);
+			   var point1:Point = new Point(mouseX, mouseY);
+			 var distance:Number = Point.distance(turrets[1], point1);*/
+			var bullet:pObject = FactoryClass.createAsset(FactoryClass.ASSET_BULLET);
 			
+			
+			
+			bullet.pointer = (Math.atan2(mouseY - turrets[1].y, mouseX - turrets[1].x) * (180 / Math.PI)) + 90;
+			turrets[1].rotation = pointer;
+			
+			turrets[1].rotation = bullet.rotation;
+			/*bullet.x = turrets[1].x;
+			bullet.y = turrets[1].y;*/
+			addChild(bullet);
+		
 		}
-		/*private function Shoot(e:Event):void
-		{
-			someNum = Math.ceil(Math.random() * 3);
-			
-			
-			var bubble:Bubble = new Bubble;
-			bubble.direction(_player.playerRotation());
-			bubble.rotation = Unit._texture.rotation;
-			stage.addChild(bubble);
-			bubbleArray.push(bubble);
-			bubble.x = _player.x;
-			bubble.y = _player.y;
-			bubble.z = _player.z -100;
-		}*/
-	}
 	
+	}
+
 }
