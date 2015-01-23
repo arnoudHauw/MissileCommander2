@@ -63,15 +63,11 @@ package
 			var bullet:pObject = FactoryClass.createAsset(FactoryClass.ASSET_BULLET);
 			
 			
+			/*bullet.pointer = (Math.atan2(mouseY - turrets[1].y, mouseX - turrets[1].x) * (180 / Math.PI)) + 90;
+			turrets[1].rotation = pointer;*/
 			
-			bullet.pointer = (Math.atan2(mouseY - turrets[1].y, mouseX - turrets[1].x) * (180 / Math.PI)) + 90;
-			turrets[1].rotation = pointer;
-			
-			turrets[1].rotation = bullet.rotation;
-			/*bullet.x = turrets[1].x;
-			bullet.y = turrets[1].y;*/
+			//bullet.rotation = turrets[1].rotation;*/
 			addChild(bullet);
-		
 		}
 	
 	}

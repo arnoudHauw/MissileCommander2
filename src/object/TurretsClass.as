@@ -12,7 +12,8 @@ package object
 	 */
 	public class TurretsClass extends pObject
 	{
-		private var asset:Turret = new Turret();
+		private var asset:Turret = new Turret(); 0.
+		
 		
 		public function TurretsClass()
 		{
